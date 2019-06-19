@@ -2,6 +2,8 @@
 http://www.pouet.net/topic.php?which=11559&page=1
 https://www.youtube.com/watch?v=nqVJWFNpTqA
 
+1. Add to Git Hub
+
 The stream contains flags, palette-data and vertex-/polygon-data for 1800 frames.
 The stream is segmented in 64KB blocks.
 A frame never crosses such a 64KB boundary.

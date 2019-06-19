@@ -4,11 +4,14 @@ namespace OxygenePolygons
 {
     public class Frame
     {
-        public Frame()
+        public Frame(int index)
         {
-            Palette = new System.Drawing.Color[16];
+            Index = index;
+            Palette = new System.Drawing.Color?[16];
             Polygons = new List<Polygon>();
         }
+
+        public int Index { get; }
 
         public bool ClearScreen { get; set; }
 
@@ -16,7 +19,7 @@ namespace OxygenePolygons
 
         public bool IndexedMode { get; set; }
 
-        public System.Drawing.Color[] Palette { get; set; }
+        public System.Drawing.Color?[] Palette { get; set; }
 
         public System.Drawing.Point[] Vertexs;
 

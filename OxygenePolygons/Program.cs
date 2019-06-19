@@ -14,6 +14,16 @@ namespace OxygenePolygons
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+
+            //Instead I do this
+            //var mainForm = new MainForm(); //create window
+            //mainForm.Show(); //display it
+            //while (mainForm.Created) //while it exists 
+            //{
+            //    mainForm.DrawFrame(); //draw frame
+            //    System.Threading.Thread.Sleep(20);
+            //    Application.DoEvents(); //run messages for this thread
+            //}
         }
     }
 }

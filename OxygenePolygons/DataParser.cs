@@ -5,7 +5,6 @@ namespace OxygenePolygons
 {
     public class DataParser
     {
-
         public static List<Frame> Parse(string fileName)
         {
             var frames = new List<Frame>();
@@ -13,6 +12,7 @@ namespace OxygenePolygons
             long streamIndex = 0;
             var endOfStream = false;
             var endOfBlock = false;
+            var index = 1;
 
             while (!endOfStream)
             {
@@ -25,7 +25,7 @@ namespace OxygenePolygons
                 }
 
                 var controlByte = bytes[streamIndex++];
-                var frame = new Frame();
+                var frame = new Frame(index++);
                 frame.ClearScreen = (controlByte & (1 << 0)) != 0;
                 frame.ContainsPalette = (controlByte & (1 << 1)) != 0;
                 frame.IndexedMode = (controlByte & (1 << 2)) != 0;
@@ -38,13 +38,13 @@ namespace OxygenePolygons
                 if (frame.IndexedMode)
                 {
                      var numberOfVertices = bytes[streamIndex++];
-                    frame.Vertexs = new System.Drawing.Point[numberOfVertices];
+                    frame.Vertexs = new Point[numberOfVertices];
 
                     for (int i = 0; i < numberOfVertices; i++)
                     {
                         var xposition = bytes[streamIndex++];
                         var yPosition = bytes[streamIndex++];
-                        frame.Vertexs[i] = new System.Drawing.Point(xposition, yPosition);
+                        frame.Vertexs[i] = new Point(xposition, yPosition);
                     }
 
                     while (1 == 1)
@@ -73,7 +73,7 @@ namespace OxygenePolygons
                             break;
                         }
 
-                        polygon.ColourIndex = (polyDescriptor & 0b11110000) >> 4;
+                        polygon.ColourIndex = ((polyDescriptor & 0b11110000) >> 4);
                         polygon.NumberOfVertexs = polyDescriptor & 0b00001111;
                         polygon.VertexIds = new byte[polygon.NumberOfVertexs];
 
@@ -85,7 +85,6 @@ namespace OxygenePolygons
 
                         frame.Polygons.Add(polygon);
                     }
-
                 }
                 else
                 {
@@ -115,7 +114,7 @@ namespace OxygenePolygons
                             break;
                         }
 
-                        polygon.ColourIndex = (polyDescriptor & 0b11110000) >> 4;
+                        polygon.ColourIndex = ((polyDescriptor & 0b11110000) >> 4);
                         polygon.NumberOfVertexs = polyDescriptor & 0b00001111;
                         polygon.Vertexs = new Point[polygon.NumberOfVertexs];
 
@@ -141,9 +140,9 @@ namespace OxygenePolygons
             //Read 1 word bitmask
             var bitmask1 = bytes[streamIndex++];
             var bitmask2 = bytes[streamIndex++];
-            ushort wordBitMask = System.BitConverter.ToUInt16(new byte[2] { bitmask1, bitmask2 }, 0);
+            var wordBitMask = System.BitConverter.ToUInt16(new byte[2] { bitmask2, bitmask1 }, 0);
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 15; i >= 0; i--)
             {
                 if ((wordBitMask & (1 << i)) != 0)
                 {
@@ -153,14 +152,14 @@ namespace OxygenePolygons
                     var colour2 = bytes[streamIndex++]; //GGGGBBBB
 
                     var red = (colour1 << 4);
-                    var green = ((colour2 & 0b11110000) << 0);
+                    var green = (colour2 & 0b11110000);
                     var blue = ((colour2 & 0b00001111) << 4);
 
                     //Convert to colour
-                    var colour = System.Drawing.Color.FromArgb(red, green, blue);
+                    var colour = Color.FromArgb(red, green, blue);
 
                     //store palette entry in reverse order
-                    frame.Palette[15 - i] = colour;
+                    frame.Palette[15-i] = colour;
                 }
             }
 

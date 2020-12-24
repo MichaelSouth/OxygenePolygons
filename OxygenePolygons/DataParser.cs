@@ -20,15 +20,17 @@ namespace OxygenePolygons
                 {
                     var remainder = streamIndex / 65536;
                     var delta = ((remainder+1) * 65536)- streamIndex;
-                    streamIndex = streamIndex + delta;
+                    streamIndex += delta;
                     endOfBlock = false;
                 }
 
                 var controlByte = bytes[streamIndex++];
-                var frame = new Frame(index++);
-                frame.ClearScreen = (controlByte & (1 << 0)) != 0;
-                frame.ContainsPalette = (controlByte & (1 << 1)) != 0;
-                frame.IndexedMode = (controlByte & (1 << 2)) != 0;
+                var frame = new Frame(index++)
+                {
+                    ClearScreen = (controlByte & (1 << 0)) != 0,
+                    ContainsPalette = (controlByte & (1 << 1)) != 0,
+                    IndexedMode = (controlByte & (1 << 2)) != 0
+                };
 
                 if (frame.ContainsPalette)
                 {

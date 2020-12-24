@@ -8,10 +8,10 @@ namespace OxygenePolygons
     public partial class MainForm : Form
     {
         private int _currentFrame = 0;
-        private List<Frame> _frames;
-        private Color[] _palette;
-        private Font _font;
-        private Brush _brush;
+        private readonly List<Frame> _frames;
+        private readonly Color[] _palette;
+        private readonly Font _font;
+        private readonly Brush _brush;
 
         public MainForm()
         {
@@ -62,8 +62,8 @@ namespace OxygenePolygons
                     for (int i= 0; i < polygon.NumberOfVertexs; i++)
                     {
                         var tempPoint = frame.Vertexs[polygon.VertexIds[i]];
-                        tempPoint.X = tempPoint.X * sizeXDelta;
-                        tempPoint.Y = tempPoint.Y * sizeYDelta;
+                        tempPoint.X *= sizeXDelta;
+                        tempPoint.Y *= sizeYDelta;
                         points[i] = tempPoint;
                     }
 
@@ -79,8 +79,8 @@ namespace OxygenePolygons
                     for (int i = 0; i < polygon.NumberOfVertexs; i++)
                     {
                         var tempPoint = polygon.Vertexs[i];
-                        tempPoint.X = tempPoint.X * sizeXDelta;
-                        tempPoint.Y = tempPoint.Y * sizeYDelta;
+                        tempPoint.X *= sizeXDelta;
+                        tempPoint.Y *= sizeYDelta;
                         points[i] = tempPoint;
                     }
 
